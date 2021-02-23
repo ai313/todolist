@@ -11,30 +11,28 @@
 try
 {
 
+$title=$_POST['title'];
+$content=$_POST['content'];
+
+$title=htmlspecialchars($title,ENT_QUOTES,'UTF-8');
+$content=htmlspecialchars($content,ENT_QUOTES,'UTF-8');
+
 $dsn='mysql:bdname=shop;host=localhost;charest=utf8';
 $user='root';
 $password=";
 $dbh=new PDO($dsn,$user,$password);
 $dbh->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
 
-$sql='SELECT name FROM mst_staff WHERE 1';
+$sql='INSERT INTO mst_staff(name,password) VALUES (?,?)';
 $stmt=$dbh->prepare($sql);
-$stmt->execute();
+$data[]=$title;
+$data[]=$content;
+$stmt->execute($data);
 
 $dbh=null;
 
-print'一覧'<br /><br />';
-
-while(true)
-{
-$rec=$stmt->fetch(PDO::FETCH_ASSOC);
-if($rec==false)
-{
-break;
-}
-print $rec['name'];
-print'<br />';
-}
+print $title
+print'を追加しました。'<br />';
 
 }
 catch (Exception $e)
